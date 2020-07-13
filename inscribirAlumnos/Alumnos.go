@@ -43,9 +43,23 @@ func imprimeAlumnos(lista []Alumno) {
 }
 
 /**
-Funcion que me permite agregar un alumno a la lista de alumnos
+Función que me permite
 */
 
+func creaAlumno(x int) Alumno {
+	nombre := ""
+	fmt.Println("Escriba su nombre")
+	fmt.Scanln(&nombre)
+	edad := ""
+	fmt.Println("Escriba su edad")
+	fmt.Scanln(&edad)
+	alumno := Alumno{x, nombre, edad}
+	return alumno
+}
+
+/**
+Funcion auxiliar que me permite agregar un alumno a la lista de alumnos
+*/
 func agregaAlumno(lista []Alumno, a Alumno) []Alumno {
 	lista = append(lista, a)
 	return lista
@@ -74,6 +88,32 @@ func buscaAlumnos(lista []Alumno, a Alumno) int {
 	return -1
 }
 
+/**
+Funcion auxiliar que me permite assegurar que los id no se van a repetir
+si se borra un alumno de la lista.
+Recibe una lista de alumnos
+Devuelve una lista de alumnos
+*/
+
+func validarID(lista []Alumno) []Alumno {
+	listaAuxiliar := make([]Alumno, 0)
+	centinela := Alumno{0, "1", "0"}
+	x := 0
+	for j := 0; j < len(lista); j++ {
+		centinela = lista[j]
+		x = j + 1
+		centinela.id = x
+		listaAuxiliar = append(listaAuxiliar, centinela)
+	}
+	return listaAuxiliar
+
+}
+
+/**
+Funcion que me permite eliminar a los alumnos de la lista, recibe la lista
+con los alumnos en el grupo y el indice  que me dice que alumno quiere
+borrar
+*/
 func eliminaLista(lista []Alumno, i int) []Alumno {
 	if hayAlumnos(lista) {
 		fmt.Println("No hay alumnos")
@@ -83,16 +123,64 @@ func eliminaLista(lista []Alumno, i int) []Alumno {
 		return listaAlumnos
 	}
 	lista[i] = lista[len(lista)-1]
-	return lista[:len(lista)-1]
+	lista = lista[:len(lista)-1]
+	return validarID(lista)
 }
 
 func main() {
-	alumno1 := Alumno{1, "Paco", "15"}
-	alumno2 := Alumno{1, "Pancho", "14"}
-	alumno3 := Alumno{1, "julia", "16"}
-	listaAlumnos := []Alumno{alumno1, alumno2}
-	listaAlumnos = agregaAlumno(listaAlumnos, alumno3)
-	//listaAlumnos2 := make([]Alumno, 0)
-	imprimeAlumnos(listaAlumnos)
-	print(alumno1.sonIguales(alumno2))
+	var salir int = 0
+	listaAlumnos := make([]Alumno, 0)
+	centinela := Alumno{0, "", "0"}
+	index := 0
+	for ok := 0; salir != 5; ok++ {
+		fmt.Println("1 ingresa alumo")
+
+		fmt.Println("2 ver lista de alumnos")
+		fmt.Println("3 elimina alumnos")
+		fmt.Println("4 Busca alumnos")
+		fmt.Println("5 Salir")
+		fmt.Scanln(&salir)
+
+		if salir == 1 {
+			if hayAlumnos(listaAlumnos) {
+				centinela = creaAlumno(1)
+				listaAlumnos = append(listaAlumnos, centinela)
+			} else {
+				centinela = creaAlumno(len(listaAlumnos) + 1)
+				listaAlumnos = append(listaAlumnos, centinela)
+
+			}
+
+		}
+
+		if salir == 2 {
+			imprimeAlumnos(listaAlumnos)
+		}
+
+		if salir == 3 {
+			fmt.Println("Escriba el numero de el alumno que quiere eliminar")
+			fmt.Scanln(&index)
+			if len(listaAlumnos) < index || index < 1 {
+				fmt.Println("Ese Id no existe")
+
+			} else {
+				fmt.Println("Se elimino con exito")
+				eliminaLista(listaAlumnos, index-1)
+			}
+
+		}
+		if salir == 4 {
+			fmt.Println("Escriba el numero del alumno que quiere buscar")
+			fmt.Scanln(&index)
+			if len(listaAlumnos) < index || index < 1 {
+				fmt.Println("Ese Id no existe")
+
+			} else {
+				fmt.Println("El alumno encontrado es")
+				listaAlumnos[index-1].imprime()
+			}
+
+		}
+
+	}
 }

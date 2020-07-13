@@ -35,7 +35,6 @@ func multComplejos(comple1 complex64, comple2 complex64) complex64 {
 
 // Main
 func main() {
-
 	fmt.Println("Calculadora")
 	fmt.Println("suma  ........ 1")
 	fmt.Println("resta ........ 2")
