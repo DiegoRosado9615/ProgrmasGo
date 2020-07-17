@@ -20,3 +20,7 @@ func New() Server {
 	a.router = r
 	return a
 }
+
+func (a *api) Router() http.Handler {
+	return a.router
+}
